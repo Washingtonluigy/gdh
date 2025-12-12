@@ -130,8 +130,16 @@ function App() {
 
   // Handle authentication state and navigation
   useEffect(() => {
-    console.log('Auth state:', { user: !!user, authLoading, inviteToken, currentPage });
-    
+    console.log('🔍 Auth state:', {
+      user: !!user,
+      userEmail: user?.email,
+      profile: !!profile,
+      profileRole: profile?.role,
+      authLoading,
+      inviteToken,
+      currentPage
+    });
+
     if (authLoading) {
       console.log('⏳ Still loading auth...');
       return;
@@ -163,15 +171,21 @@ function App() {
         }
       } else {
         // Authenticated - go to dashboard
-        if (currentPage !== 'tracking-active' && currentPage !== 'location-viewer' && 
-            currentPage !== 'gps-tracker' && currentPage !== 'gps-map' && 
+        if (currentPage !== 'tracking-active' && currentPage !== 'location-viewer' &&
+            currentPage !== 'gps-tracker' && currentPage !== 'gps-map' &&
             currentPage !== 'dashboard') {
-          console.log('👤 Authenticated - going to dashboard');
+          console.log('✅ Authenticated - going to dashboard', {
+            currentPage,
+            userEmail: user?.email,
+            profileRole: profile?.role
+          });
           setCurrentPage('dashboard');
+        } else {
+          console.log('📍 Already on correct page:', currentPage);
         }
       }
     }
-  }, [user, authLoading, inviteToken, currentPage, acceptedTokens]);
+  }, [user, profile, authLoading, inviteToken, currentPage, acceptedTokens]);
 
   const handleAcceptTracking = async () => {
     if (!inviteToken) return;
